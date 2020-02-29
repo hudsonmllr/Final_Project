@@ -23,7 +23,8 @@ library(readxl)
 # personal readiness. They issues an annual report on manpower and readiness for
 # the armed forces. The most recent release is for FY2017. I used the PDFTables
 # packages and https://pdftables.com/blog/convert-pdf-to-excel-r to pull tables
-# from the report and convert them to excel files.
+# from the report and convert them to excel files. Orginal source of the
+# material was at https://www.cna.org/pop-rep/2016/summary/summary.pdf
 
 FY2017_DOD <- read_excel("FY2017 DOD.xlsx", skip = 3) %>% clean_names() %>% slice(1:15)
 
@@ -86,7 +87,15 @@ ED_Gender_States_2015 <- read_excel("ED_Gender_States_2015.xlsx")
 ED_Gender_2018 <- read_excel("ED_Gender_2018.xlsx")
 ```
 
-## About
+### Could the military learn better gender representation from colleges and could colleges learn better racial diversity from the military?
+
+### About the Project:
+#### The purpose of this project is to compare and analyze the difference in racial and gender diversity between the United States Armed Forces and US colleges and universities. The military has become more racial diverse in last few decades but despite this trend towards diversity, there has not been a surge of females to the armed forces. Likewise, US colleges and universities have seen higher numbers of women enroll but they still lack racial diversity. 
+
+### Methodology:
+#### This project will use college enrollment data gathered from National Center for Education Statistics and military demographic statistics gathered by the Office of the Under Secretary of Defense for Personnel and Readiness and published in the Fiscal Year 2017 Population Representation in the Military Service. In order to compare the new fields, I will first display the racial and gender breakdowns for each field. I will then see if those racial or gender statistics can be explained by where the majority of applicants for the military or college are located.
+
+
 
 
 
