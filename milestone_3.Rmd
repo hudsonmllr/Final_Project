@@ -1,0 +1,93 @@
+---
+title: "Milestone 3"
+author: "Hudson Miller"
+date: "2/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+``` {r, include=FALSE, echo=FALSE}
+library(pdftables)
+library(readr)
+library(tidyverse)
+library(janitor)
+library(readxl)
+```
+
+``` {r,  echo=FALSE, include=FALSE}
+
+# I pulled the following information from the Office of the Under Secretary of
+# personal readiness. They issues an annual report on manpower and readiness for
+# the armed forces. The most recent release is for FY2017. I used the PDFTables
+# packages and https://pdftables.com/blog/convert-pdf-to-excel-r to pull tables
+# from the report and convert them to excel files.
+
+FY2017_DOD <- read_excel("FY2017 DOD.xlsx", skip = 3) %>% clean_names() %>% slice(1:15)
+
+FY2017_DOD <- FY2017_DOD %>%
+  select(year,
+         "Tot_AD_White"=white_2,
+         "Tot_AD_Black"=black_3,
+         "Tot_AD_AIAN"=aian_4,
+         "Tot_AD_Asian"=asian_5,
+         "Tot_AD_NHPI"=nhpi_6,
+         "Tot_AD_2+"=two_or_more,
+         "Tot_AD_UNKWN"=unknown,
+         "Total_AD"=total_9,
+         "Tot_Civ_White"=white_10,
+         "Tot_Civ_Black"=black_11,
+         "Tot_Civ_AIAN"=aian_12,
+         "Tot_Civ_Asian"=asian_13,
+         "Tot_Civ_NHPI"=nhpi_14,
+         "Tot_Civ_2+"=two_or_more_2,
+         "Tot_Civ"=total_16)
+
+# I seperated the original data set into 2 files, one with number and the other
+# with percentages to make it easier to use. I was able to pull the file from
+# https://prhome.defense.gov/Portals/52/Documents/MRA_Docs/MPP/AP/poprep/2017/Appendix%20D%20-%20(Historical%20Component).pdf
+# and it shows the stats on racial representation in the miltiary from 2003 to
+# 2017.
+
+FY2017_DOD_Percent <- read_excel("FY2017 DOD (%).xlsx") %>% clean_names()
+
+FY2017_DOD_Percent <- FY2017_DOD_Percent %>%
+  select(year, "%_AD_White"=white_2,
+         "%_AD_Black"=black_3,
+         "%_AD_AIAN"=aian_4,
+         "%_AD_Asian"=asian_5,
+         "%_AD_NHPI"=nhpi_6,
+         "%_AD_2+"=two_or_more,
+         "%_AD_UNKWN"=unknown,
+         "%_AD"=total_9,
+         "%_Civ_White"=white_10,
+         "%_Civ_Black"=black_11,
+         "%_Civ_AIAN"=aian_12,
+         "%_Civ_Asian"=asian_13,
+         "%_Civ_NHPI"=nhpi_14,
+         "%_Civ_2+"=two_or_more_2,
+         "%_Civ"=total_16)
+
+# Racial and Gender numbers and percentages for college enrollment from selected
+# dates between 1976 and 2004.All of the following files were taken from the
+# National Center for Education Statistics at
+# https://nces.ed.gov/programs/digest/d18/tables/dt18_306.10.asp. These 3 files
+# provide overall enrollment statistics for US colleges and universities. They
+# breakdown applicants, admitted students, and enrolled students by gender and
+# by states. They also provide stats on racial statistics for undergrad and
+# graduate universities.
+
+ED_Race_enr <- read_excel("ED_Race_enr.xls")
+
+ED_Gender_States_2015 <- read_excel("ED_Gender_States_2015.xlsx")
+
+ED_Gender_2018 <- read_excel("ED_Gender_2018.xlsx")
+```
+
+## About
+
+
+
+
