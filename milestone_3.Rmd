@@ -85,6 +85,8 @@ ED_Race_enr <- read_excel("ED_Race_enr.xls")
 ED_Gender_States_2015 <- read_excel("ED_Gender_States_2015.xlsx")
 
 ED_Gender_2018 <- read_excel("ED_Gender_2018.xlsx")
+
+# link to rmd https://github.com/hudsonmllr/milestone
 ```
 
 ### Could the military learn better gender representation from colleges and could colleges learn better racial diversity from the military?
