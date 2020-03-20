@@ -1,0 +1,193 @@
+---
+title: "Milestone 4"
+author: "Hudson Miller"
+date: "3/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+``` {r, include=FALSE, echo=FALSE}
+library(pdftables)
+library(readr)
+library(tidyverse)
+library(janitor)
+library(readxl)
+```
+
+``` {r, Cleaning Active Duty Data on Race, echo=FALSE, include=FALSE}
+
+# These are the files that I have gathers together and cleaned up.
+# FY2017_DOD_Percent
+# FY2017_DOD
+# ED_Race_enr
+# ED_Gender_States_2015
+# ED_Gender_2018
+
+# link to rmd https://github.com/hudsonmllr/milestone
+
+# I pulled the following information from the Office of the Under Secretary of
+# personal readiness. They issues an annual report on manpower and readiness for
+# the armed forces. The most recent release is for FY2017. I used the PDFTables
+# packages and https://pdftables.com/blog/convert-pdf-to-excel-r to pull tables
+# from the report and convert them to excel files. Orginal source of the
+# material was at https://www.cna.org/pop-rep/2016/summary/summary.pdf I am
+# working on deciding what I want to combine based on what presentation medium I
+# choose for each element of the project. I have a lot of data for education and
+# military demographics but I need to decided what to do with it.
+
+# This dataset has stats on the breakdown by race of people entering the military who are not 
+FY2017_DOD_Acc <- read_excel("FY2017 DOD.xlsx", skip = 3, col_types = "numeric") %>%
+  clean_names() %>%
+  slice(1:15) %>% rename(Year = year,
+         Total_Active_Duty_White = white_2,
+         Total_Active_Duty_Black = black_3,
+         Total_Active_Duty_AIAN = aian_4,
+         Total_Active_Duty_Asian = asian_5,
+         Total_Active_Duty_NHPI = nhpi_6,
+         Total_Active_Duty_Two_or_More = two_or_more,
+         Total_Active_Duty_Unkown = unknown,
+         Total_Active_Duty = total_9,
+         Total_Civilian_White = white_10,
+         Total_Civilian_Black = black_11,
+         Total_Civilian_AIAN = aian_12,
+         Total_Civilian_Asian = asian_13,
+         Total_Civilian_NHPI = nhpi_14,
+         Total_Civilian_Two_or_More = two_or_more_2,
+         Total_Civilian = total_16)
+
+# These two datasets are similar to the previous one but break it down by branch
+# to give a more detailed picture. The first is the number of people per group
+# and the second is the percent of the total for each group.
+
+DOD_Acc_by_Branch_Numbers <- read_excel("DOD Acc Numbers (2003-17).xlsx.xlsx") %>% clean_names()
+
+DOD_Acc_by_Branch_Percent <- read_excel("DOD Acc Race Percent.xlsx") %>% clean_names()
+
+# These two datasets are similar to the previous two but show the current racial
+# demographics of enlisted service members.
+
+DOD_Enl_by_Branch_Numbers <- read_excel("DOD Enlisted Numbers (2003-17).xlsx") %>% clean_names()
+
+DOD_Enl_by_Branch_Percent <- read_excel("DOD Enlisted Race Percent.xlsx") %>% clean_names()
+
+# This dataset breaks down accession by region of the US.
+
+DOD_race_by_region <- read_excel("DOD race by region.xlsx") %>% clean_names()
+
+```
+
+``` {r, Cleaning Active Duty Data on Race with Percents, echo=FALSE, include=FALSE}
+
+# I seperated the original data set into 2 files, one with number and the other
+# with percentages to make it easier to use. I was able to pull the file from
+# https://prhome.defense.gov/Portals/52/Documents/MRA_Docs/MPP/AP/poprep/2017/Appendix%20D%20-%20(Historical%20Component).pdf
+# and it shows the stats on racial representation in the miltiary from 2003 to
+# 2017.
+
+FY2017_DOD_Acc_Percent <- read_excel("FY2017 DOD (%).xlsx") %>%
+  clean_names() %>% 
+  rename(Year = year,
+         Acitve_Duty_White = x2,
+         Acitve_Duty_Black = black_3,
+         Acitve_Duty_AIAN = aian_4,
+         Acitve_Duty_Asian = asian_5,
+         Acitve_Duty_NHPI = nhpi_6,
+         Acitve_Duty_Two_or_More = two_or_more,
+         Acitve_Duty_UNKWN = unknown,
+         Civilian_White = white,
+         Civilian_Black = black_10,
+         Civilian_AIAN = aian_11,
+         Civilian_Asian = asian_12,
+         Civilian_NHPI = nhpi_13,
+         Civilian_Two_or_More = two_or_more_2)
+
+```
+
+``` {r, Cleaning College Data on Race, echo = FALSE, include = FALSE}
+
+# Racial and Gender numbers and percentages for college enrollment from selected
+# dates between 1976 and 2004.All of the following files were taken from the
+# National Center for Education Statistics at
+# https://nces.ed.gov/programs/digest/d18/tables/dt18_306.10.asp. These 3 files
+# provide overall enrollment statistics for US colleges and universities. They
+# breakdown applicants, admitted students, and enrolled students by gender and
+# by states. They also provide stats on racial statistics for undergrad and
+# graduate universities. I have cleaned the names and changed certain names to
+# make the data easier to use. 
+
+
+ED_Race_enr <- read_excel("ED_Race_enr.xls") 
+
+# First I want to split the data on race into 2 data sets, one with number of
+# people and the other with percentages. I think I will split these to files up
+# more into more specific groups but they will sufice for now.
+
+# This data covers a wide range of dates. 
+
+ED_Race_Enrollment_Numbers <- ED_Race_enr %>% select(1:9)
+
+ED_Race_Enrollment_Percentage <- ED_Race_enr %>% select(1, 10:17)
+
+# But the following data covers more recent enrollment figures by racial groups.
+
+College_Enrollment_Pct <- read_excel("College Enrollment Data Percentage.xlsx") 
+
+College_Enrollment_Numbers <- read_excel("College Enrollment Data Numbers.xls") 
+
+```
+
+``` {r, Cleaning College Data on Gender by State, echo = FALSE, include = FALSE}
+
+ED_Gender_States_2015 <- read_excel("ED_Gender_States_2015.xlsx") %>%
+  rename(Area = 'State or jurisdiction',
+  Total_Applicants = `Total1 _APP`,
+  Male_Applicants = Men_APP,
+  Female_Applicants = Women_APP,
+  Total_Admitted = Total_Adm,
+  Male_Admitted = Men_Adm,
+  Female_Admitted = Women_Adm,
+  Total_Enrollment = Total_Enr,
+  Male_Enrollment = Men_Enr,
+  Female_Enrollment = Women_Enr,
+  Total_Enrollment_Full_Time = Total_Enr_FT,
+  Male_Enrollment_Full_Time = Men_Enr_FT,
+  Female_Enrollment_Full_Time = Women_Enr_FT,
+  Total_Enrollment_Part_Time = Total_Enr_PT,
+  Male_Enrollment_Part_Time = Men_Enr_PT,
+  Female_Enrollment_Part_Time = Women_Enr_PT)
+
+```
+
+``` {r, Cleaning College Data on Gender, echo = FALSE, include = FALSE}
+
+ED_Gender_2018 <- read_excel("ED_Gender_2018.xlsx") %>%
+  clean_names 
+
+```
+
+``` {r, First Graphic, echo = FALSE}
+
+# First I want to make sure my data is easy to work with for my graphic. I am
+# taking the DOD data on percentages of each race over a period of time and
+# transposing it so that the years match up with the education data.
+
+FY2017_DOD_Acc_Percent.g1 <- FY2017_DOD_Acc_Percent %>%  slice(8:15)
+
+College_Enrollment_Pct.g1 <- as.data.frame(t(College_Enrollment_Pct[,-1])) 
+colnames(College_Enrollment_Pct.g1) <- College_Enrollment_Pct$`Population Type`
+College_Enrollment_Pct.g1 <- College_Enrollment_Pct.g1 %>% slice(2010:2011)
+
+```
+## Could the military learn better gender representation from colleges and could colleges learn better racial diversity from the military?
+
+### About the Project:
+#### The purpose of this project is to compare and analyze the difference in racial and gender diversity between the United States Armed Forces and US colleges and universities. The military has become more racial diverse in last few decades but despite this trend towards diversity, there has not been a surge of females to the armed forces. Likewise, US colleges and universities have seen higher numbers of women enroll but they still lack racial diversity. 
+
+### Methodology:
+#### This project will use college enrollment data gathered from National Center for Education Statistics and military demographic statistics gathered by the Office of the Under Secretary of Defense for Personnel and Readiness and published in the Fiscal Year 2017 Population Representation in the Military Service. In order to compare the new fields, I will first display the racial and gender breakdowns for each field. I will then see if those racial or gender statistics can be explained by where the majority of applicants for the military or college are located.
+
+
+
