@@ -15,6 +15,7 @@ library(readr)
 library(tidyverse)
 library(janitor)
 library(readxl)
+library(shiny)
 ```
 
 ``` {r, Cleaning Data, echo=FALSE, include=FALSE}
