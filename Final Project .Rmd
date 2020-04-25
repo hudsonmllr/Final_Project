@@ -20,11 +20,18 @@ library(readxl)
 ``` {r, Cleaning Active Duty Data on Race, echo=FALSE, include=FALSE}
 
 # These are the files that I have gathers together and cleaned up.
-# FY2017_DOD_Percent
-# FY2017_DOD
-# ED_Race_enr
-# ED_Gender_States_2015
-# ED_Gender_2018
+# View(FY2017_DOD_Acc)
+# View(DOD_Acc_by_Branch_Numbers)
+# View(DOD_Acc_by_Branch_Percent)
+# View(DOD_Enl_by_Branch_Numbers)
+# View(DOD_Enl_by_Branch_Percent)
+# View(DOD_race_by_region)
+# View(FY2017_DOD_Acc_Percent)
+# View(ED_Race_Enrollment_Numbers)
+# View(ED_Race_Enrollment_Percentage)
+# View(College_Enrollment_Pct)
+# View(College_Enrollment_Numbers)
+# View(Civ_Graphic1)
 
 # link to rmd https://github.com/hudsonmllr/milestone
 
@@ -39,7 +46,7 @@ library(readxl)
 # military demographics but I need to decided what to do with it.
 
 # This dataset has stats on the breakdown by race of people entering the military who are not 
-FY2017_DOD_Acc <- read_excel("FY2017 DOD.xlsx", skip = 3, col_types = "numeric") %>%
+FY2017_DOD_Acc <- read_excel("Mil_data/FY2017 DOD.xlsx", skip = 3, col_types = "numeric") %>%
   clean_names() %>%
   slice(1:15) %>% rename(Year = year,
          Total_Active_Duty_White = white_2,
@@ -62,20 +69,20 @@ FY2017_DOD_Acc <- read_excel("FY2017 DOD.xlsx", skip = 3, col_types = "numeric")
 # to give a more detailed picture. The first is the number of people per group
 # and the second is the percent of the total for each group.
 
-DOD_Acc_by_Branch_Numbers <- read_excel("DOD Acc Numbers (2003-17).xlsx.xlsx") %>% clean_names()
+DOD_Acc_by_Branch_Numbers <- read_excel("Mil_data/DOD Acc Numbers (2003-17).xlsx.xlsx") %>% clean_names()
 
-DOD_Acc_by_Branch_Percent <- read_excel("DOD Acc Race Percent.xlsx") %>% clean_names()
+DOD_Acc_by_Branch_Percent <- read_excel("Mil_data/DOD Acc Race Percent.xlsx") %>% clean_names()
 
 # These two datasets are similar to the previous two but show the current racial
 # demographics of enlisted service members.
 
-DOD_Enl_by_Branch_Numbers <- read_excel("DOD Enlisted Numbers (2003-17).xlsx") %>% clean_names()
+DOD_Enl_by_Branch_Numbers <- read_excel("Mil_data/DOD Enlisted Numbers (2003-17).xlsx") %>% clean_names()
 
-DOD_Enl_by_Branch_Percent <- read_excel("DOD Enlisted Race Percent.xlsx") %>% clean_names()
+DOD_Enl_by_Branch_Percent <- read_excel("Mil_data/DOD Enlisted Race Percent.xlsx") %>% clean_names()
 
 # This dataset breaks down accession by region of the US.
 
-DOD_race_by_region <- read_excel("DOD race by region.xlsx") %>% clean_names()
+DOD_race_by_region <- read_excel("Mil_data/DOD race by region.xlsx") %>% clean_names()
 
 ```
 
@@ -87,7 +94,7 @@ DOD_race_by_region <- read_excel("DOD race by region.xlsx") %>% clean_names()
 # and it shows the stats on racial representation in the miltiary from 2003 to
 # 2017.
 
-FY2017_DOD_Acc_Percent <- read_excel("FY2017 DOD (%).xlsx") %>%
+FY2017_DOD_Acc_Percent <- read_excel("Mil_data/FY2017 DOD (%).xlsx") %>%
   clean_names() %>% 
   rename(Year = year,
          Acitve_Duty_White = x2,
@@ -119,7 +126,7 @@ FY2017_DOD_Acc_Percent <- read_excel("FY2017 DOD (%).xlsx") %>%
 # make the data easier to use. 
 
 
-ED_Race_enr <- read_excel("ED_Race_enr.xls") 
+ED_Race_enr <- read_excel("Education_data/ED_Race_enr.xls") 
 
 # First I want to split the data on race into 2 data sets, one with number of
 # people and the other with percentages. I think I will split these to files up
@@ -133,15 +140,15 @@ ED_Race_Enrollment_Percentage <- ED_Race_enr %>% select(1, 10:17)
 
 # But the following data covers more recent enrollment figures by racial groups.
 
-College_Enrollment_Pct <- read_excel("College Enrollment Data Percentage.xlsx") 
+College_Enrollment_Pct <- read_excel("Education_data/College Enrollment Data Percentage.xlsx") 
 
-College_Enrollment_Numbers <- read_excel("College Enrollment Data Numbers.xls") 
+College_Enrollment_Numbers <- read_excel("Education_data/College Enrollment Data Numbers.xls") 
 
 ```
 
 ``` {r, Cleaning College Data on Gender by State, echo = FALSE, include = FALSE}
 
-ED_Gender_States_2015 <- read_excel("ED_Gender_States_2015.xlsx") %>%
+ED_Gender_States_2015 <- read_excel("Education_data/ED_Gender_States_2015.xlsx") %>%
   rename(Area = 'State or jurisdiction',
   Total_Applicants = `Total1 _APP`,
   Male_Applicants = Men_APP,
@@ -163,7 +170,7 @@ ED_Gender_States_2015 <- read_excel("ED_Gender_States_2015.xlsx") %>%
 
 ``` {r, Cleaning College Data on Gender, echo = FALSE, include = FALSE}
 
-ED_Gender_2018 <- read_excel("ED_Gender_2018.xlsx") %>%
+ED_Gender_2018 <- read_excel("Education_data/ED_Gender_2018.xlsx") %>%
   clean_names 
 
 ```
@@ -174,29 +181,46 @@ ED_Gender_2018 <- read_excel("ED_Gender_2018.xlsx") %>%
 # taking the DOD data on percentages of each race over a period of time and
 # transposing it so that the years match up with the education data.
 
-FY2017_DOD_Acc_Percent.g1 <- FY2017_DOD_Acc_Percent %>%  slice(8:15)
-AD_Graphic1 <- FY2017_DOD_Acc_Percent.g1 %>% select(1:7) %>% slice(1, 3:7)
-
+DOD_Enl_Acc_Pct <- DOD_Enl_by_Branch_Percent %>% select(1, 10, 12, 21, 23, 32, 34, 43, 45, 54, 56, 65, 67, 76, 78) %>% slice(10:15)
+DOD_Race_Pct_G1 <- DOD_Enl_Acc_Pct %>% select(1, 2, 4, 6, 8, 10, 12, 14)
+Civ_Race_Pct_G1 <- DOD_Enl_Acc_Pct %>% select(1, 3, 5, 7, 9, 11, 13, 15)
 # I also am able to get the data for civilians as a whole using the DOD data.
 
-Civ_Graphic1 <- FY2017_DOD_Acc_Percent.g1 %>% select(1, 9:14) %>% slice(1, 3:8)
 
+College_Enr_G1 <- College_Enrollment_Pct %>% slice(47:53) %>% select("Racial_Group_2" = 1, 7:12) 
 
-College_Enrollment_Pct.g1 <- as.data.frame(t(College_Enrollment_Pct[,-1])) 
-colnames(College_Enrollment_Pct.g1) <- College_Enrollment_Pct$`Population Type`
-College_Enrollment_Pct.g1$observation <- 1:nrow(College_Enrollment_Pct.g1) 
-rownames(College_Enrollment_Pct.g1) <-College_Enrollment_Pct.g1$observation
-College_Enrollment_Pct.g1$Year <- c(1976, 1980, 1990, 2000, 2010, 2012, 2013, 2014, 2015,  2016, 2017)
-College_Enr_Graphic1 <- College_Enrollment_Pct.g1 %>% select(Year, everything()) %>% slice(5:11) %>% select(1, 3, 5:9)
+College_Enr_G1_New <- data.frame(t(College_Enr_G1[,-1])) 
+College_Enr_G1_New <- College_Enr_G1_New %>% mutate(Fiscal_Year = c(2012, 2013, 2014, 2015, 2016, 2017))
 
+colnames(College_Enr_G1_New) <- c("White", "Minority", "Black", "Hispanic", "Asian PI", "AIAN", "ToM", "Fiscal_Year")
+College_Enr_G1_New <- College_Enr_G1_New %>% mutate(Group = "Undergraduate Students") 
+
+colnames(DOD_Race_Pct_G1) <- c("Fiscal_Year", "White", "Black", "AIAN", "Asian", "NHPI", "ToM", "Hispanic")
+DOD_Race_Pct_G1 <- DOD_Race_Pct_G1 %>% mutate(Group = "DOD")
+
+colnames(Civ_Race_Pct_G1) <- c("Fiscal_Year", "White", "Black", "AIAN", "Asian", "NHPI", "ToM", "Hispanic")
+Civ_Race_Pct_G1 <- Civ_Race_Pct_G1 %>% mutate(Group = "Civilian")
+
+DOD_Race_Pct_G1_Spec <- DOD_Race_Pct_G1 %>% select(Fiscal_Year, Black, White, Group, Hispanic)
+Civ_Race_Pct_G1_Spec <- Civ_Race_Pct_G1 %>% select(Fiscal_Year, Black, White, Group, Hispanic)
+College_Enr_G1_Spec <- College_Enr_G1_New %>% select(Fiscal_Year, Black, White, Group, Hispanic)
+
+G1_Data <-rbind(College_Enr_G1_Spec, Civ_Race_Pct_G1_Spec, DOD_Race_Pct_G1_Spec)
+
+ggplot(G1_Data, aes(x = Fiscal_Year, y = White, color = Group)) + geom_line() + theme_grey() + labs(title = "Percentage of Population Who are White", subtitle = "Comparing Civilians(ages 18-24 years old), Active Enlisted Department of Defense Service Members, and Enrolled Undergraduate Students", caption = "Sources: National Center for Education Statistics and Department of Defense", color = "Population group")
+
+ggsave("Graphic_1.png", path = "FP_SHINY")
 ```
 
 ``` {r, Graphic, echo = FALSE}
-College_Enr_Graphic1 <- College_Enr_Graphic1 %>% clean_names()
-ggplot(FY2017_DOD_Acc_Percent, aes(Year, y= Acitve_Duty_White)) + geom_line(size=2) + theme_minimal() + labs(title = "Active Duty Enlisted Accessions by Race", subtitle = "Percentage White", x = "Year", y = "Percentage", caption = "Defense Manpower Data Center (DMDC)") + scale_x_continuous(breaks = c(2003, 2004, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017))
 
-# ("2003", "2004", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017")
-# ggplot(College_Enr_Graphic1, aes(year, y= total_white)) + geom_line() + theme_classic() + 
+
+# 
+# College_Enr_Graphic1 <- College_Enr_Graphic1 %>% clean_names()
+# ggplot(FY2017_DOD_Acc_Percent, aes(Year, y= Acitve_Duty_White)) + geom_line(size=2) + theme_minimal() + labs(title = "Active Duty Enlisted Accessions by Race", subtitle = "Percentage White", x = "Year", y = "Percentage", caption = "Defense Manpower Data Center (DMDC)") + scale_x_continuous(breaks = c(2003, 2004, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017))
+# 
+# # ("2003", "2004", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017")
+# # ggplot(College_Enr_Graphic1, aes(year, y= total_white)) + geom_line() + theme_classic() + 
 
 ```
 
@@ -209,5 +233,5 @@ ggplot(FY2017_DOD_Acc_Percent, aes(Year, y= Acitve_Duty_White)) + geom_line(size
 ### Methodology:
 #### This project will use college enrollment data gathered from National Center for Education Statistics and military demographic statistics gathered by the Office of the Under Secretary of Defense for Personnel and Readiness and published in the Fiscal Year 2017 Population Representation in the Military Service. In order to compare the new fields, I will first display the racial and gender breakdowns for each field. I will then see if those racial or gender statistics can be explained by where the majority of applicants for the military or college are located.
 
-
+## https://hudson-miller.shinyapps.io/FP_SHINY/
 
